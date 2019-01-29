@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<title>AV2</title>
+</head>
+
+<body>
+	<label>Gênero:</label>
+	<select id="genero">
+		<option value="default">Selecione...</option>
+	</select>
+
+	<div>
+		</br>
+    </div>
+    <ul id="lista"></ul>
+	<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+</body>
+
+</html>
+<script>
+    var host = 'localhost'
+	var mid = `http://${host}:5000/bestflix/`;
+
+	$(document).ready(function () {
+		$.ajax({
+			url: mid + 'listarGenero',
+			type: 'GET',
+			success: function (result) {
+				$.each(result, function (indice, genero) {
+					$("#genero").append(`<option value="` + genero.genero_id+ `">` + genero.descricao + `</option>`);
+				});
+			},
+			error: function () {
+				alert('Houve um erro.');
+			}
+		})
+	});
+
+	$("#genero").change(
+		function () {
+			var generoId = this.value;
+			if(generoId === 'default') { 
+				$("#lista").empty();
+				return;
+			};
+
+			$("#genero").attr("disabled", true);
+			
+			$.ajax({
+				url: mid + 'buscarFilmePorGenero?genero_id=' + generoId,
+				type: 'GET',
+				success: function (result) {
+					$("#lista").empty();
+					console.log(result);
+					$.each(result, function (indice, filme) {
+						$("#lista").append(
+                            `<li>Filme n° ${filme.filme_id}` +
+                            `<ul>` + 
+                            `<li>Título: ${filme.titulo} </l1>` +
+                            `<li>Ano de Lançamento: ${filme.ano_lancamento}</li>`
+                            + `</ul>` 
+                            + `</li>`
+						);
+					});
+				},
+				error: function () {
+					alert('Houve um erro.');
+				},
+				complete: function () {
+					$("#genero").attr("disabled", false);
+				}
+			})
+		}
+	);
+</script>
