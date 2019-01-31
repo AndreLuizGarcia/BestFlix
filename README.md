@@ -26,4 +26,4 @@ npm install mysql
 npm install restify-cors-middleware
 ```
 
-After that run the "node index.js" command and open the front-end "index" in your browser.
+After that run the "node index.js" command and open the front-end "ec021_av2_bestflix.html" in your browser.
